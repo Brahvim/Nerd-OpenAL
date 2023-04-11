@@ -26,12 +26,17 @@ public class NerdAlExt extends NerdExt {
 	// endregion
 
 	@Override
+	public String getExtName() {
+		return "OpenAL";
+	}
+
+	@Override
 	public Object init(final CustomSketchBuilder p_builder) {
 		final NerdAl toRet = new NerdAl(this.settings);
 
 		// When the scene is changed, delete unnecessary OpenAL data:
-		p_builder.addSketchConstructionListener((s) -> s
-				.getSceneManager().addSceneChangedListener((a, p, c) -> {
+		p_builder.addSketchConstructionListener(s -> s.getSceneManager()
+				.addSceneChangedListener((a, p, c) -> {
 					if (p != null)
 						toRet.scenelyDisposal();
 					toRet.unitSize = NerdAl.UNIT_SIZE_3D_PARK_SCENE;
@@ -42,37 +47,35 @@ public class NerdAlExt extends NerdExt {
 		// ...It does!:
 		final PVector lastCameraPos = new PVector();
 
-		p_builder.addDrawListener((s) -> {
+		p_builder.addDrawListener(s -> {
 			// Process everything, every frame!:
 			toRet.framelyCallback();
 
 			final NerdAbstractCamera camera = s.getCamera();
+			toRet.setListenerOrientation(camera.up.x, camera.up.y, camera.up.z);
 
-			toRet.setListenerOrientation(camera.up);
-			toRet.setListenerVelocity(PVector.sub(camera.pos, lastCameraPos));
-			// PVector.div((PVector.sub(camera.pos, lastCameraPos)), this.unitSize));
+			toRet.setListenerVelocity(
+					camera.pos.x - lastCameraPos.x,
+					camera.pos.y - lastCameraPos.y,
+					camera.pos.z - lastCameraPos.z);
+			// PVector.div((PVector.sub(camera.pos, lastCameraPos)).array(),
+			// this.unitSize));
 
 			// JIT-style optimization + protection from `0`!:
-			if (toRet.unitSize == 1.0f)
-				toRet.setListenerPosition(camera.pos);
-			if (toRet.unitSize == 0.0f)
-				toRet.setListenerPosition(camera.pos);
-			else
-				toRet.setListenerPosition(PVector.div(camera.pos, toRet.unitSize));
+			if (toRet.unitSize == 1.0f || toRet.unitSize == 0.0f) {
+				toRet.setListenerPosition(camera.pos.x, camera.pos.y, camera.pos.z);
+			} else {
+				final PVector listenerPos = PVector.div(camera.pos, toRet.unitSize);
+				toRet.setListenerPosition(listenerPos.x, listenerPos.y, listenerPos.z);
+			}
 
 			lastCameraPos.set(camera.pos);
 		});
 
 		// When the sketch is exiting, delete all OpenAL native data:
-		p_builder.addSketchDisposalListener((s) -> toRet.completeDisposal());
+		p_builder.addSketchDisposalListener(s -> toRet.completeDisposal());
 
 		return toRet;
-
-	}
-
-	@Override
-	public String getExtName() {
-		return "OpenAL";
 	}
 
 }
