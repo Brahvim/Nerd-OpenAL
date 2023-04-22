@@ -65,8 +65,12 @@ public class NerdAlExt extends NerdExt {
 			if (toRet.unitSize == 1.0f || toRet.unitSize == 0.0f) {
 				toRet.setListenerPosition(camera.pos.x, camera.pos.y, camera.pos.z);
 			} else {
-				final PVector listenerPos = PVector.div(camera.pos, toRet.unitSize);
-				toRet.setListenerPosition(listenerPos.x, listenerPos.y, listenerPos.z);
+				// final PVector listenerPos = PVector.div(camera.pos, toRet.unitSize);
+				// toRet.setListenerPosition(listenerPos.x, listenerPos.y, listenerPos.z);
+				toRet.setListenerPosition(
+						camera.pos.x / toRet.unitSize,
+						camera.pos.y / toRet.unitSize,
+						camera.pos.z / toRet.unitSize);
 			}
 
 			lastCameraPos.set(camera.pos);
