@@ -1,7 +1,6 @@
 package com.brahvim.nerd.openal.al_asset_loaders;
 
 import com.brahvim.nerd.io.asset_loader.AssetLoaderFailedException;
-import com.brahvim.nerd.io.asset_loader.AssetLoaderOptions;
 import com.brahvim.nerd.io.asset_loader.AssetLoader;
 import com.brahvim.nerd.openal.NerdAl;
 import com.brahvim.nerd.openal.al_buffers.AlOggBuffer;
@@ -9,16 +8,8 @@ import com.brahvim.nerd.papplet_wrapper.Sketch;
 
 public class OggBufferDataAsset extends AssetLoader<AlOggBuffer> {
 
-	// region SINGLETON STUFF.
-	private static final OggBufferDataAsset LOADER = new OggBufferDataAsset();
-
-	public static AssetLoader<?> getLoader() {
-		return OggBufferDataAsset.LOADER;
-	}
-	// endregion
-
 	@Override
-	public AlOggBuffer fetchData(final Sketch p_sketch, final String p_path, final AssetLoaderOptions... p_options)
+	public AlOggBuffer fetchData(final Sketch p_sketch, final String p_path)
 			throws AssetLoaderFailedException, IllegalArgumentException {
 		try {
 			final AlOggBuffer oggBuffer = new AlOggBuffer((NerdAl) p_sketch.getNerdExt("OpenAL"));
