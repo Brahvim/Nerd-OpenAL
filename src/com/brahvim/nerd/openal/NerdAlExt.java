@@ -66,28 +66,30 @@ public class NerdAlExt extends NerdExt {
 					p_alInst.framelyCallback();
 
 					final NerdAbstractCamera camera = p_sketch.getCamera();
-					p_alInst.setListenerOrientation(camera.up.x, camera.up.y, camera.up.z);
+					final PVector camPos = camera.getPos(), camUp = camera.getUp();
+
+					p_alInst.setListenerOrientation(camUp.x, camUp.y, camUp.z);
 
 					p_alInst.setListenerVelocity(
-							camera.pos.x - lastCameraPos.x,
-							camera.pos.y - lastCameraPos.y,
-							camera.pos.z - lastCameraPos.z);
-					// PVector.div((PVector.sub(camera.pos, lastCameraPos)).array(),
+							camPos.x - lastCameraPos.x,
+							camPos.y - lastCameraPos.y,
+							camPos.z - lastCameraPos.z);
+					// PVector.div((PVector.sub(camPos, lastCameraPos)).array(),
 					// this.unitSize));
 
 					// JIT-style optimization + protection from `0`!:
 					if (p_alInst.unitSize == 1.0f || p_alInst.unitSize == 0.0f) {
-						p_alInst.setListenerPosition(camera.pos.x, camera.pos.y, camera.pos.z);
+						p_alInst.setListenerPosition(camPos.x, camPos.y, camPos.z);
 					} else {
-						// final PVector listenerPos = PVector.div(camera.pos, toRet.unitSize);
+						// final PVector listenerPos = PVector.div(camPos, toRet.unitSize);
 						// toRet.setListenerPosition(listenerPos.x, listenerPos.y, listenerPos.z);
 						p_alInst.setListenerPosition(
-								camera.pos.x / p_alInst.unitSize,
-								camera.pos.y / p_alInst.unitSize,
-								camera.pos.z / p_alInst.unitSize);
+								camPos.x / p_alInst.unitSize,
+								camPos.y / p_alInst.unitSize,
+								camPos.z / p_alInst.unitSize);
 					}
 
-					lastCameraPos.set(camera.pos);
+					lastCameraPos.set(camPos);
 				};
 			}
 		}
