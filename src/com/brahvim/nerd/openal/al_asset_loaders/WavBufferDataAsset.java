@@ -1,25 +1,25 @@
 package com.brahvim.nerd.openal.al_asset_loaders;
 
-import com.brahvim.nerd.io.asset_loader.AssetLoaderFailedException;
-import com.brahvim.nerd.io.asset_loader.AssetLoader;
+import com.brahvim.nerd.io.asset_loader.NerdAssetLoaderException;
+import com.brahvim.nerd.io.asset_loader.NerdAssetLoader;
 import com.brahvim.nerd.openal.NerdAl;
 import com.brahvim.nerd.openal.al_buffers.AlWavBuffer;
-import com.brahvim.nerd.papplet_wrapper.Sketch;
+import com.brahvim.nerd.papplet_wrapper.NerdSketch;
 
 @Deprecated
-public class WavBufferDataAsset extends AssetLoader<AlWavBuffer> {
+public class WavBufferDataAsset extends NerdAssetLoader<AlWavBuffer> {
 
 	@Override
-	public AlWavBuffer fetchData(final Sketch p_sketch, final String p_path)
-			throws AssetLoaderFailedException, IllegalArgumentException {
+	public AlWavBuffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
+			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
-			final AlWavBuffer wavBuffer = new AlWavBuffer((NerdAl) p_sketch.getNerdExt("OpenAL"));
+			final AlWavBuffer wavBuffer = new AlWavBuffer((NerdAl) p_NerdSketch.getNerdExt("OpenAL"));
 			wavBuffer.shouldDispose(false);
 			wavBuffer.loadFrom(p_path);
 			return wavBuffer;
 		} catch (final Exception e) {
 			e.printStackTrace();
-			throw new AssetLoaderFailedException();
+			throw new NerdAssetLoaderException();
 			// return ByteBuffer.allocate(0);
 		}
 	}

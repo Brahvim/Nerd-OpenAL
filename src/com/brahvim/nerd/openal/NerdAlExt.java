@@ -2,10 +2,10 @@ package com.brahvim.nerd.openal;
 
 import java.util.function.Consumer;
 
-import com.brahvim.nerd.api.cameras.NerdAbstractCamera;
-import com.brahvim.nerd.papplet_wrapper.CustomSketchBuilder;
+import com.brahvim.nerd.papplet_wrapper.NerdCustomSketchBuilder;
 import com.brahvim.nerd.papplet_wrapper.NerdExt;
-import com.brahvim.nerd.papplet_wrapper.Sketch;
+import com.brahvim.nerd.papplet_wrapper.NerdSketch;
+import com.brahvim.nerd.rendering.cameras.NerdAbstractCamera;
 
 import processing.core.PConstants;
 import processing.core.PVector;
@@ -33,7 +33,7 @@ public class NerdAlExt extends NerdExt {
 	}
 
 	@Override
-	public Object init(final CustomSketchBuilder p_builder) {
+	public Object init(final NerdCustomSketchBuilder p_builder) {
 		final NerdAl toRet = new NerdAl(this.settings);
 
 		// When the scene is changed, delete unnecessary OpenAL data:
@@ -47,14 +47,14 @@ public class NerdAlExt extends NerdExt {
 		// We have framely callbacks, yes:
 		p_builder.addDrawListener(s -> this.provideDrawListener(s, toRet));
 
-		// When the sketch is exiting, delete all OpenAL native data:
+		// When the NerdSketch is exiting, delete all OpenAL native data:
 		p_builder.addSketchDisposalListener(s -> toRet.completeDisposal());
 
 		return toRet;
 	}
 
-	protected Consumer<Sketch> provideDrawListener(final Sketch p_sketch, final NerdAl p_alInst) {
-		switch (p_sketch.RENDERER) {
+	protected Consumer<NerdSketch> provideDrawListener(final NerdSketch p_NerdSketch, final NerdAl p_alInst) {
+		switch (p_NerdSketch.RENDERER) {
 			case PConstants.P2D, PConstants.P3D -> {
 				// I wanted to declare this lambda as an anon class instead, but I wanted to
 				// watch this trick where I have a variable from outside the lambda work there.
@@ -65,7 +65,7 @@ public class NerdAlExt extends NerdExt {
 					// Process everything, every frame!:
 					p_alInst.framelyCallback();
 
-					final NerdAbstractCamera camera = p_sketch.getCamera();
+					final NerdAbstractCamera camera = p_NerdSketch.getCamera();
 					final PVector camPos = camera.getPos(), camUp = camera.getUp();
 
 					p_alInst.setListenerOrientation(camUp.x, camUp.y, camUp.z);

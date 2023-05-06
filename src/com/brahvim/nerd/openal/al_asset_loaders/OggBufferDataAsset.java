@@ -1,24 +1,24 @@
 package com.brahvim.nerd.openal.al_asset_loaders;
 
-import com.brahvim.nerd.io.asset_loader.AssetLoaderFailedException;
-import com.brahvim.nerd.io.asset_loader.AssetLoader;
+import com.brahvim.nerd.io.asset_loader.NerdAssetLoaderException;
+import com.brahvim.nerd.io.asset_loader.NerdAssetLoader;
 import com.brahvim.nerd.openal.NerdAl;
 import com.brahvim.nerd.openal.al_buffers.AlOggBuffer;
-import com.brahvim.nerd.papplet_wrapper.Sketch;
+import com.brahvim.nerd.papplet_wrapper.NerdSketch;
 
-public class OggBufferDataAsset extends AssetLoader<AlOggBuffer> {
+public class OggBufferDataAsset extends NerdAssetLoader<AlOggBuffer> {
 
 	@Override
-	public AlOggBuffer fetchData(final Sketch p_sketch, final String p_path)
-			throws AssetLoaderFailedException, IllegalArgumentException {
+	public AlOggBuffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
+			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
-			final AlOggBuffer oggBuffer = new AlOggBuffer((NerdAl) p_sketch.getNerdExt("OpenAL"));
+			final AlOggBuffer oggBuffer = new AlOggBuffer((NerdAl) p_NerdSketch.getNerdExt("OpenAL"));
 			oggBuffer.shouldDispose(false);
 			oggBuffer.loadFrom(p_path);
 			return oggBuffer;
 		} catch (final Exception e) {
 			e.printStackTrace();
-			throw new AssetLoaderFailedException();
+			throw new NerdAssetLoaderException();
 			// return ShortBuffer.allocate(0);
 		}
 	}
