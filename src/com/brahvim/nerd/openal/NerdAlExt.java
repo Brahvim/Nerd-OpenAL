@@ -2,10 +2,10 @@ package com.brahvim.nerd.openal;
 
 import java.util.function.Consumer;
 
+import com.brahvim.nerd.framework.cameras.NerdAbstractCamera;
 import com.brahvim.nerd.papplet_wrapper.NerdCustomSketchBuilder;
 import com.brahvim.nerd.papplet_wrapper.NerdExt;
 import com.brahvim.nerd.papplet_wrapper.NerdSketch;
-import com.brahvim.nerd.rendering.cameras.NerdAbstractCamera;
 
 import processing.core.PConstants;
 import processing.core.PVector;
@@ -38,7 +38,7 @@ public class NerdAlExt extends NerdExt {
 
 		// When the scene is changed, delete unnecessary OpenAL data:
 		p_builder.addSketchConstructionListener(s -> s.getSceneManager()
-				.addSceneChangedListener((a, p, c) -> {
+				.addSceneChangeListener((a, p, c) -> {
 					if (p != null)
 						toRet.scenelyDisposal();
 					toRet.unitSize = NerdAl.UNIT_SIZE_3D_PARK_SCENE;
