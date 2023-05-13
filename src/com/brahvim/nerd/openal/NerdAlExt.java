@@ -3,9 +3,9 @@ package com.brahvim.nerd.openal;
 import java.util.function.Consumer;
 
 import com.brahvim.nerd.framework.cameras.NerdAbstractCamera;
-import com.brahvim.nerd.papplet_wrapper.NerdCustomSketchBuilder;
-import com.brahvim.nerd.papplet_wrapper.NerdExt;
-import com.brahvim.nerd.papplet_wrapper.NerdSketch;
+import com.brahvim.nerd.processing_wrapper.NerdCustomSketchBuilder;
+import com.brahvim.nerd.processing_wrapper.NerdExt;
+import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
 import processing.core.PConstants;
 import processing.core.PVector;
