@@ -12,18 +12,18 @@ import processing.core.PVector;
 
 public class NerdAlExt extends NerdExt {
 
-	private AlContext.AlContextSettings settings;
+	private final AlContext.AlContextSettings SETTINGS;
 
 	// region Constructors.
 	public NerdAlExt(final AlContext.AlContextSettings p_settings) {
-		this.settings = p_settings;
+		this.SETTINGS = p_settings;
 	}
 
 	public NerdAlExt(final Consumer<AlContext.AlContextSettings> p_settingsBuilder) {
 		final var toPass = new AlContext.AlContextSettings();
 		if (p_settingsBuilder != null)
 			p_settingsBuilder.accept(toPass);
-		this.settings = toPass;
+		this.SETTINGS = toPass;
 	}
 	// endregion
 
@@ -34,7 +34,7 @@ public class NerdAlExt extends NerdExt {
 
 	@Override
 	public Object init(final NerdCustomSketchBuilder p_builder) {
-		final NerdAl toRet = new NerdAl(this.settings);
+		final NerdAl toRet = new NerdAl(this.SETTINGS);
 
 		// When the scene is changed, delete unnecessary OpenAL data:
 		p_builder.addSketchConstructionListener(s -> s.getSceneManager()
