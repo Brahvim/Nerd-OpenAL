@@ -10,7 +10,7 @@ import com.brahvim.nerd.processing_wrapper.NerdSketch;
 public class Mp3BufferDataAsset extends NerdAssetLoader<AlMp3Buffer> {
 
 	@Override
-	public AlMp3Buffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
+	protected AlMp3Buffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
 			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
 			final AlMp3Buffer mp3Buffer = new AlMp3Buffer((NerdAl) p_NerdSketch.getNerdExt("OpenAL"));

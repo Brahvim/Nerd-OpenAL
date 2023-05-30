@@ -9,7 +9,7 @@ import com.brahvim.nerd.processing_wrapper.NerdSketch;
 public class OggBufferDataAsset extends NerdAssetLoader<AlOggBuffer> {
 
 	@Override
-	public AlOggBuffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
+	protected AlOggBuffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
 			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
 			final AlOggBuffer oggBuffer = new AlOggBuffer((NerdAl) p_NerdSketch.getNerdExt("OpenAL"));

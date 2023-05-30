@@ -10,7 +10,7 @@ import com.brahvim.nerd.processing_wrapper.NerdSketch;
 public class WavBufferDataAsset extends NerdAssetLoader<AlWavBuffer> {
 
 	@Override
-	public AlWavBuffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
+	protected AlWavBuffer fetchData(final NerdSketch p_NerdSketch, final String p_path)
 			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
 			final AlWavBuffer wavBuffer = new AlWavBuffer((NerdAl) p_NerdSketch.getNerdExt("OpenAL"));
