@@ -9,7 +9,7 @@ import com.brahvim.nerd.processing_wrapper.NerdSketch;
 @Deprecated
 public class Mp3BufferDataAsset extends NerdSinglePathAssetLoader<AlMp3Buffer> {
 
-	protected Mp3BufferDataAsset(final String p_path) {
+	public Mp3BufferDataAsset(final String p_path) {
 		super(p_path);
 	}
 

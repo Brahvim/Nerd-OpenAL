@@ -8,7 +8,7 @@ import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
 public class OggBufferDataAsset extends NerdSinglePathAssetLoader<AlOggBuffer> {
 
-	protected OggBufferDataAsset(final String p_path) {
+	public OggBufferDataAsset(final String p_path) {
 		super(p_path);
 	}
 
