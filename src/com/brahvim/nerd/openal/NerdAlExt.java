@@ -54,7 +54,7 @@ public class NerdAlExt extends NerdExt {
 	}
 
 	protected Consumer<NerdSketch> provideDrawListener(final NerdSketch p_NerdSketch, final NerdAl p_alInst) {
-		switch (p_NerdSketch.RENDERER) {
+		switch (p_NerdSketch.RENDERER_NAME) {
 			case PConstants.P2D, PConstants.P3D -> {
 				// I wanted to declare this lambda as an anon class instead, but I wanted to
 				// watch this trick where I have a variable from outside the lambda work there.
