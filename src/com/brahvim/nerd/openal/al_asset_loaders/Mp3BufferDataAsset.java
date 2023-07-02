@@ -6,6 +6,10 @@ import com.brahvim.nerd.openal.NerdAl;
 import com.brahvim.nerd.openal.al_buffers.AlMp3Buffer;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
+/**
+ * @deprecated since I relied on an old library and doing that failed.
+ *             ...Only if I knew how to use it correctly!
+ */
 @Deprecated
 public class Mp3BufferDataAsset extends NerdSinglePathAssetLoader<AlMp3Buffer> {
 
