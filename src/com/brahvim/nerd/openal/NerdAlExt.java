@@ -53,8 +53,8 @@ public class NerdAlExt extends NerdExt {
 		return toRet;
 	}
 
-	protected Consumer<NerdSketch> provideDrawListener(final NerdSketch p_NerdSketch, final NerdAl p_alInst) {
-		switch (p_NerdSketch.RENDERER_NAME) {
+	protected Consumer<NerdSketch> provideDrawListener(final NerdSketch p_sketch, final NerdAl p_alInst) {
+		switch (p_sketch.RENDERER_NAME) {
 			case PConstants.P2D, PConstants.P3D -> {
 				// I wanted to declare this lambda as an anon class instead, but I wanted to
 				// watch this trick where I have a variable from outside the lambda work there.
@@ -65,7 +65,7 @@ public class NerdAlExt extends NerdExt {
 					// Process everything, every frame!:
 					p_alInst.framelyCallback();
 
-					final NerdAbstractCamera camera = p_NerdSketch.getCamera();
+					final NerdAbstractCamera camera = p_sketch.getCamera();
 					final PVector camPos = camera.getPos(), camUp = camera.getUp();
 
 					p_alInst.setListenerOrientation(camUp.x, camUp.y, camUp.z);
