@@ -55,7 +55,7 @@ public class NerdAlExt extends NerdExt {
 	protected Consumer<NerdSketch> provideDrawListener(final NerdSketch p_sketch, final NerdAl p_alInst) {
 		// Renderer does not have a camera? No worries! Users handle this stuff now!
 		// We just... Process everything, every frame! (As we always do! ^-^):
-		if (PConstants.P3D.equals(p_sketch.SKETCH_SETTINGS.RENDERER_NAME))
+		if (!PConstants.P3D.equals(p_sketch.SKETCH_SETTINGS.RENDERER_NAME))
 			return s -> p_alInst.framelyCallback();
 
 		// I wanted to declare this lambda as an anon class instead, but I wanted to
