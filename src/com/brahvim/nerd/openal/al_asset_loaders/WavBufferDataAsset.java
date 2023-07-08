@@ -3,7 +3,6 @@ package com.brahvim.nerd.openal.al_asset_loaders;
 import com.brahvim.nerd.io.asset_loader.NerdAssetLoaderException;
 import com.brahvim.nerd.io.asset_loader.NerdSinglePathAssetLoader;
 import com.brahvim.nerd.openal.NerdAl;
-import com.brahvim.nerd.openal.NerdAlExt;
 import com.brahvim.nerd.openal.al_buffers.AlWavBuffer;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
@@ -22,7 +21,7 @@ public class WavBufferDataAsset extends NerdSinglePathAssetLoader<AlWavBuffer> {
 	protected AlWavBuffer fetchData(final NerdSketch p_sketch)
 			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
-			final AlWavBuffer wavBuffer = new AlWavBuffer((NerdAl) p_sketch.getNerdExt(NerdAlExt.class));
+			final AlWavBuffer wavBuffer = new AlWavBuffer((NerdAl) p_sketch.getNerdExt("OpenAL"));
 			wavBuffer.shouldDispose(false);
 			wavBuffer.loadFrom(super.path);
 			return wavBuffer;

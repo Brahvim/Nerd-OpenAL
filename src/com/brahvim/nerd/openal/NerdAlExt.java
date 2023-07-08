@@ -47,6 +47,11 @@ public class NerdAlExt extends NerdExt {
 		return toRet;
 	}
 
+	@Override
+	public String getExtName() {
+		return "OpenAL";
+	}
+
 	protected Consumer<NerdSketch> provideDrawListener(final NerdSketch p_sketch, final NerdAl p_alInst) {
 		// Renderer does not have a camera? No worries! Users handle this stuff now!
 		// We just... Process everything, every frame! (As we always do! ^-^):
