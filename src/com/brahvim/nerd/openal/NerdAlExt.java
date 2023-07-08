@@ -28,11 +28,6 @@ public class NerdAlExt extends NerdExt {
 	// endregion
 
 	@Override
-	public String getExtName() {
-		return "OpenAL";
-	}
-
-	@Override
 	public Object init(final NerdCustomSketchBuilder p_builder) {
 		final NerdAl toRet = new NerdAl(this.SETTINGS);
 
