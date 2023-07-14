@@ -29,7 +29,7 @@ public class NerdOpenAlModule extends NerdModule {
 
 	private final PVector lastCameraPos = new PVector();
 
-	private AlContext.AlContextSettings alModuleSettings;
+	private final AlContext.AlContextSettings alModuleSettings = new AlContext.AlContextSettings();
 	private NerdAbstractCamera trackedCamera;
 	private NerdAl alMan;
 	// endregion
@@ -41,14 +41,13 @@ public class NerdOpenAlModule extends NerdModule {
 
 	@Override
 	protected void assignModuleSettings(final NerdModuleSettings<?> p_settings) {
+		// This is, *secretly*, also a check for `null`!:
 		if (p_settings instanceof final NerdOpenAlModuleSettings moduleSettings) {
 			this.alModuleSettings.frequency = moduleSettings.frequency;
 			this.alModuleSettings.monoSources = moduleSettings.monoSources;
 			this.alModuleSettings.stereoSources = moduleSettings.stereoSources;
 			this.alModuleSettings.refresh = moduleSettings.refresh;
 			this.alModuleSettings.sync = moduleSettings.sync;
-		} else {
-			this.alModuleSettings = new AlContext.AlContextSettings();
 		}
 	}
 	// endregion
