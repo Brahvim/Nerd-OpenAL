@@ -1,10 +1,10 @@
 package com.brahvim.nerd.openal;
 
-import java.util.function.Consumer;
-
 import com.brahvim.nerd.framework.cameras.NerdAbstractCamera;
 import com.brahvim.nerd.framework.scene_api.NerdScenesModule;
+import com.brahvim.nerd.processing_wrapper.NerdGraphics;
 import com.brahvim.nerd.processing_wrapper.NerdModule;
+import com.brahvim.nerd.processing_wrapper.NerdModuleSettings;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 import com.brahvim.nerd.processing_wrapper.NerdSketchBuilderSettings;
 
@@ -12,24 +12,44 @@ import processing.core.PVector;
 
 public class NerdOpenAlModule extends NerdModule {
 
-	private final AlContext.AlContextSettings SETTINGS;
+	// region Fields.
+	/**
+	 * When set to {@code true}, the properties from the {@link NerdAbstractCamera},
+	 * set using {@link NerdOpenAlModule#setCameraToTrack(NerdAbstractCamera)}
+	 * are used to set OpenAL listener parameters.
+	 */
+	public boolean letCameraSetListener = true;
+
+	/**
+	 * Is the camera you want to us track, always contained in the default
+	 * {@link NerdGraphics} buffer of the sketch? If so, set this field to
+	 * {@code true}, to automatically track the camera present there.
+	 */
+	public boolean trackedCamIsDefaultCam = true;
+
 	private final PVector lastCameraPos = new PVector();
 
+	private AlContext.AlContextSettings alModuleSettings;
+	private NerdAbstractCamera trackedCamera;
 	private NerdAl alMan;
+	// endregion
 
-	// region Constructors.
-	public NerdOpenAlModule(final NerdSketch p_sketch, final AlContext.AlContextSettings p_settings) {
+	// region Construction.
+	public NerdOpenAlModule(final NerdSketch p_sketch) {
 		super(p_sketch);
-		this.SETTINGS = p_settings;
 	}
 
-	public NerdOpenAlModule(final NerdSketch p_sketch, final Consumer<AlContext.AlContextSettings> p_settingsBuilder) {
-		super(p_sketch);
-
-		final var toPass = new AlContext.AlContextSettings();
-		if (p_settingsBuilder != null)
-			p_settingsBuilder.accept(toPass);
-		this.SETTINGS = toPass;
+	@Override
+	protected void assignModuleSettings(final NerdModuleSettings<?> p_settings) {
+		if (p_settings instanceof final NerdOpenAlModuleSettings moduleSettings) {
+			this.alModuleSettings.frequency = moduleSettings.frequency;
+			this.alModuleSettings.monoSources = moduleSettings.monoSources;
+			this.alModuleSettings.stereoSources = moduleSettings.stereoSources;
+			this.alModuleSettings.refresh = moduleSettings.refresh;
+			this.alModuleSettings.sync = moduleSettings.sync;
+		} else {
+			this.alModuleSettings = new AlContext.AlContextSettings();
+		}
 	}
 	// endregion
 
@@ -37,9 +57,18 @@ public class NerdOpenAlModule extends NerdModule {
 		return this.alMan;
 	}
 
+	public NerdAbstractCamera getTrackedCamera() {
+		return this.trackedCamera;
+	}
+
+	public void setCameraToTrack(final NerdAbstractCamera p_cameraToTrack) {
+		this.trackedCamera = p_cameraToTrack;
+	}
+
+	// region `NerdSketch` events!
 	@Override
 	public void sketchConstructed(final NerdSketchBuilderSettings p_settings) {
-		this.alMan = new NerdAl(this.SETTINGS);
+		this.alMan = new NerdAl(this.alModuleSettings);
 
 		// When the scene is changed, delete unnecessary OpenAL data:
 		super.SKETCH.getNerdModule(NerdScenesModule.class)
@@ -47,11 +76,11 @@ public class NerdOpenAlModule extends NerdModule {
 					if (p != null)
 						this.alMan.scenelyDisposal();
 				});
+	}
 
-		// We have framely callbacks, yes:
-		// p_builder.addDrawListener(s -> this.provideDrawListener(s, this.alInst));
-
-		// return this.alInst;
+	@Override
+	protected void postSetup() {
+		this.trackedCamera = super.SKETCH.getNerdGraphics().getCurrentCamera();
 	}
 
 	@Override
@@ -65,12 +94,13 @@ public class NerdOpenAlModule extends NerdModule {
 			return;
 		}
 
-		// I wanted to declare this lambda as an anon class instead, but I wanted to
-		// watch this trick where I have a variable from outside the lambda work there.
-		// ...It does!:
-
-		// Process everything, every frame!:
-		this.alMan.framelyCallback();
+		// ...If the user does not want the automation,
+		// process everything, every frame!
+		// ...and return!
+		if (!this.letCameraSetListener) {
+			this.alMan.framelyCallback();
+			return;
+		}
 
 		final NerdAbstractCamera camera = super.SKETCH.getNerdGraphics().getCurrentCamera();
 		final PVector camPos = camera.getPos(), camUp = camera.getUp();
@@ -85,12 +115,16 @@ public class NerdOpenAlModule extends NerdModule {
 		this.alMan.setListenerPosition(camPos.x, camPos.y, camPos.z);
 
 		this.lastCameraPos.set(camPos);
+
+		// Process everything, every frame!:
+		this.alMan.framelyCallback();
 	}
 
 	@Override
-	// When the NerdSketch is exiting, delete all OpenAL native data:
 	protected void dispose() {
+		// When the NerdSketch is exiting, delete all OpenAL native data:
 		this.alMan.completeDisposal();
 	}
+	// endregion
 
 }
