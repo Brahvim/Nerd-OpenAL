@@ -3,6 +3,7 @@ package com.brahvim.nerd.openal.al_asset_loaders;
 import com.brahvim.nerd.io.asset_loader.NerdAssetLoaderException;
 import com.brahvim.nerd.io.asset_loader.NerdSinglePathAssetLoader;
 import com.brahvim.nerd.openal.NerdAl;
+import com.brahvim.nerd.openal.NerdOpenAlModule;
 import com.brahvim.nerd.openal.al_buffers.AlOggBuffer;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
@@ -16,13 +17,14 @@ public class OggBufferDataAsset extends NerdSinglePathAssetLoader<AlOggBuffer> {
 	protected AlOggBuffer fetchData(final NerdSketch p_sketch)
 			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
-			final AlOggBuffer oggBuffer = new AlOggBuffer((NerdAl) p_sketch.getNerdExt("OpenAL"));
+			final NerdAl alMan = p_sketch.getNerdModule(NerdOpenAlModule.class).getOpenAlManager();
+			final AlOggBuffer oggBuffer = new AlOggBuffer(alMan);
 			oggBuffer.shouldDispose(false);
 			oggBuffer.loadFrom(super.path);
 			return oggBuffer;
 		} catch (final Exception e) {
 			e.printStackTrace();
-			throw new NerdAssetLoaderException();
+			throw new NerdAssetLoaderException(this);
 			// return ShortBuffer.allocate(0);
 		}
 	}
