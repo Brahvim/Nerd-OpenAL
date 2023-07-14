@@ -23,7 +23,7 @@ public abstract class AlBufferAsset<AlBufferT extends AlBuffer<?>> extends NerdS
 			final NerdAl alMan = p_sketch.getNerdModule(NerdOpenAlModule.class).getOpenAlManager();
 
 			final AlBufferT alBuffer = this.createBuffer(alMan);
-			alBuffer.setDisposability(false);
+			alBuffer.setDisposability(this.shouldDispose);
 			alBuffer.loadFrom(super.path);
 
 			return alBuffer;
