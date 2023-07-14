@@ -17,6 +17,9 @@ public class NerdOpenAlModule extends NerdModule {
 	 * When set to {@code true}, the properties from the {@link NerdAbstractCamera},
 	 * set using {@link NerdOpenAlModule#setCameraToTrack(NerdAbstractCamera)}
 	 * are used to set OpenAL listener parameters.
+	 * 
+	 * @apiNote
+	 *          Set to {@code true} by default!
 	 */
 	public boolean letCameraSetListener = true;
 
@@ -24,6 +27,9 @@ public class NerdOpenAlModule extends NerdModule {
 	 * Is the camera you want to us track, always contained in the default
 	 * {@link NerdGraphics} buffer of the sketch? If so, set this field to
 	 * {@code true}, to automatically track the camera present there.
+	 * 
+	 * @apiNote
+	 *          Set to {@code true} by default!
 	 */
 	public boolean trackedCamIsDefaultCam = true;
 
@@ -52,6 +58,7 @@ public class NerdOpenAlModule extends NerdModule {
 	}
 	// endregion
 
+	// region Getters and setters.
 	public NerdAl getOpenAlManager() {
 		return this.alMan;
 	}
@@ -63,6 +70,7 @@ public class NerdOpenAlModule extends NerdModule {
 	public void setCameraToTrack(final NerdAbstractCamera p_cameraToTrack) {
 		this.trackedCamera = p_cameraToTrack;
 	}
+	// endregion
 
 	// region `NerdSketch` events!
 	@Override
@@ -101,6 +109,9 @@ public class NerdOpenAlModule extends NerdModule {
 			return;
 		}
 
+		// Process everything, every frame!:
+		this.alMan.framelyCallback();
+
 		final NerdAbstractCamera camera = super.SKETCH.getNerdGraphics().getCurrentCamera();
 		final PVector camPos = camera.getPos(), camUp = camera.getUp();
 
@@ -113,10 +124,9 @@ public class NerdOpenAlModule extends NerdModule {
 
 		this.alMan.setListenerPosition(camPos.x, camPos.y, camPos.z);
 
+		// Not passed by reference. What if `camPos` is `null`?!
 		this.lastCameraPos.set(camPos);
 
-		// Process everything, every frame!:
-		this.alMan.framelyCallback();
 	}
 
 	@Override
