@@ -10,6 +10,16 @@ import com.brahvim.nerd.openal.al_buffers.AlWavBuffer;
 @Deprecated
 public class AlWavBufferAsset extends AlBufferAsset<AlWavBuffer> {
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public AlWavBufferAsset(final String p_path) {
+		super(p_path);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public AlWavBufferAsset(final String p_path, final boolean p_autoDispose) {
 		super(p_path, p_autoDispose);
 	}
