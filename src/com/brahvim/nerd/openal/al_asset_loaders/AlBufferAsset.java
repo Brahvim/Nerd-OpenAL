@@ -5,11 +5,12 @@ import com.brahvim.nerd.io.asset_loader.NerdAssetLoaderException;
 import com.brahvim.nerd.io.asset_loader.NerdSinglePathAssetLoader;
 import com.brahvim.nerd.openal.AlBuffer;
 import com.brahvim.nerd.openal.NerdAl;
-import com.brahvim.nerd.openal.NerdOpenAlModule;
+import com.brahvim.nerd.openal.NerdAlUpdater;
 import com.brahvim.nerd.processing_wrapper.NerdSketch;
 
 public abstract class AlBufferAsset<AlBufferT extends AlBuffer<?>> extends NerdSinglePathAssetLoader<AlBufferT> {
 
+	protected final NerdAlUpdater MAN;
 	protected final boolean WILL_AUTO_DISPOSE;
 
 	// region Constructors.
@@ -20,8 +21,8 @@ public abstract class AlBufferAsset<AlBufferT extends AlBuffer<?>> extends NerdS
 	 * @param p_path is a string denoting the path to a file containing data to
 	 *               be filled into the buffer.
 	 */
-	protected AlBufferAsset(final String p_path) {
-		this(p_path, true);
+	protected AlBufferAsset(final NerdAlUpdater p_alMan, final String p_path) {
+		this(p_alMan, p_path, true);
 	}
 
 	/**
@@ -31,8 +32,9 @@ public abstract class AlBufferAsset<AlBufferT extends AlBuffer<?>> extends NerdS
 	 * @param p_path is a string denoting the path to a file containing data to
 	 *               be filled into the buffer.
 	 */
-	protected AlBufferAsset(final String p_path, final boolean p_autoDispose) {
+	protected AlBufferAsset(final NerdAlUpdater p_alMan, final String p_path, final boolean p_autoDispose) {
 		super(p_path);
+		this.MAN = p_alMan;
 		this.WILL_AUTO_DISPOSE = p_autoDispose;
 	}
 	// endregion
@@ -41,13 +43,12 @@ public abstract class AlBufferAsset<AlBufferT extends AlBuffer<?>> extends NerdS
 	protected AlBufferT fetchData(final NerdSketch p_sketch)
 			throws NerdAssetLoaderException, IllegalArgumentException {
 		try {
-			final NerdAl alMan = p_sketch.getNerdModule(NerdOpenAlModule.class).getOpenAlManager();
 
-			final AlBufferT alBuffer = this.createBuffer(alMan);
+			final AlBufferT alBuffer = this.createBuffer(this.MAN.getUnderlyingManager());
 			alBuffer.setDisposability(this.WILL_AUTO_DISPOSE);
 			alBuffer.loadFrom(super.path);
-
 			return alBuffer;
+
 		} catch (final Exception e) {
 			throw new NerdAssetLoaderException(this, e);
 		}
